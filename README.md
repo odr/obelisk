@@ -4,7 +4,7 @@ Most part of source library is dropped (as I don't need it). The rest is adjuste
 
 # Build
 
-1. Install GHC JS as described [here](https://www.haskell.org/ghcup/guide/#cross-support)
+1. Install GHC JS with ghcup as described [here](https://www.haskell.org/ghcup/guide/#cross-support)
 2. Set GHC javascript-unknown-ghcjs-9.12.1 as default in ghcup
 2. Build all with cabal:
 ```
