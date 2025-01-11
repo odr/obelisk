@@ -1,14 +1,16 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeOperators #-}
 
 module Data.Tabulation where
 
 import Control.Lens
+import Data.Kind
 
 -- | This is a class for record types whose fields can be enumerated by an associated GADT. It's closely related to the concept of a representable functor, except without the functor part, and the fields are not all the same type.
 class HasFields a where
-  type Field a :: * -> *
+  type Field a :: Type -> Type
 
   fieldLens :: Field a x -> Lens' a x
   tabulateFieldsA :: Applicative f => (forall x. Field a x -> f x) -> f a

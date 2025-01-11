@@ -67,6 +67,7 @@ import Prelude hiding ((.), id)
 import Control.Category (Category (..), (.))
 import Control.Category.Cartesian ((&&&))
 import Control.Lens hiding (Bifunctor, bimap, universe, element)
+import Control.Monad
 import Control.Monad.Fix
 import Control.Monad.Morph
 import Control.Monad.Primitive
@@ -278,13 +279,13 @@ eitherRouted :: (Reflex t, MonadFix m, MonadHold t m) => RoutedT t (Either (Dyna
 eitherRouted r = RoutedT $ ReaderT $ runRoutedT r <=< eitherDyn
 
 -- | WARNING: The input 'Dynamic' must be fully constructed when this is run
-strictDynWidget :: (MonadSample t m, MonadHold t m, Adjustable t m) => (a -> m b) -> RoutedT t a m (Dynamic t b)
+strictDynWidget :: (MonadHold t m, Adjustable t m) => (a -> m b) -> RoutedT t a m (Dynamic t b)
 strictDynWidget f = RoutedT $ ReaderT $ \r -> do
   r0 <- sample $ current r
   (result0, result') <- runWithReplace (f r0) $ f <$> updated r
   holdDyn result0 result'
 
-strictDynWidget_ :: (MonadSample t m, MonadHold t m, Adjustable t m) => (a -> m ()) -> RoutedT t a m ()
+strictDynWidget_ :: (MonadSample t m, Adjustable t m) => (a -> m ()) -> RoutedT t a m ()
 strictDynWidget_ f = RoutedT $ ReaderT $ \r -> do
   r0 <- sample $ current r
   (_, _) <- runWithReplace (f r0) $ f <$> updated r
